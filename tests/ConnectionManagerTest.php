@@ -15,7 +15,7 @@ use SURFnet\LC\OpenVpn\ConnectionManager;
 
 class ConnectionManagerTest extends TestCase
 {
-    public function testConnect()
+    public function testConnections()
     {
         $serverManager = new ConnectionManager(
             [
@@ -44,5 +44,47 @@ class ConnectionManagerTest extends TestCase
             ],
             $serverManager->connections()
         );
+    }
+
+    public function testConnectionsNoConnections()
+    {
+        $serverManager = new ConnectionManager(
+            [
+                'tcp://127.0.0.1:11941',
+            ],
+            new NullLogger(),
+            new TestSocket()
+        );
+
+        $this->assertSame(
+            [],
+            $serverManager->connections()
+        );
+    }
+
+    public function testDisconnect()
+    {
+        $serverManager = new ConnectionManager(
+            [
+                'tcp://127.0.0.1:11940',
+            ],
+            new NullLogger(),
+            new TestSocket()
+        );
+
+        $this->assertTrue($serverManager->disconnect('foo'));
+    }
+
+    public function testDisconnectNotThere()
+    {
+        $serverManager = new ConnectionManager(
+            [
+                'tcp://127.0.0.1:11941',
+            ],
+            new NullLogger(),
+            new TestSocket()
+        );
+
+        $this->assertFalse($serverManager->disconnect('foo'));
     }
 }

@@ -9,6 +9,7 @@
 
 namespace SURFnet\LC\OpenVpn\Tests;
 
+use Exception;
 use SURFnet\LC\OpenVpn\Exception\ManagementSocketException;
 use SURFnet\LC\OpenVpn\ManagementSocketInterface;
 
@@ -54,19 +55,24 @@ class TestSocket implements ManagementSocketInterface
      */
     public function command($command)
     {
-        if ('status 2' === $command) {
-            if ('tcp://127.0.0.1:11940' === $this->socketAddress) {
-                // send back the returnData as an array
-                return \explode("\n", \file_get_contents(__DIR__.'/socket/status_with_clients.txt'));
-            } else {
-                return \explode("\n", \file_get_contents(__DIR__.'/socket/status_no_clients.txt'));
-            }
-        } elseif ('kill' === $command) {
-            if ('tcp://127.0.0.1:11940' === $this->socketAddress) {
-                return \explode("\n", \file_get_contents(__DIR__.'/socket/kill_success.txt'));
-            } else {
-                return \explode("\n", \file_get_contents(__DIR__.'/socket/kill_error.txt'));
-            }
+        switch ($command) {
+            case 'status 2':
+                if ('tcp://127.0.0.1:11940' === $this->socketAddress) {
+                    // send back the returnData as an array
+                    return \explode("\n", \file_get_contents(__DIR__.'/socket/status_with_clients.txt'));
+                } else {
+                    return \explode("\n", \file_get_contents(__DIR__.'/socket/status_no_clients.txt'));
+                }
+                // no break
+            case 'kill foo':
+                if ('tcp://127.0.0.1:11940' === $this->socketAddress) {
+                    return \explode("\n", \file_get_contents(__DIR__.'/socket/kill_success.txt'));
+                } else {
+                    return \explode("\n", \file_get_contents(__DIR__.'/socket/kill_error.txt'));
+                }
+                // no break
+            default:
+                throw new Exception('no match for this command');
         }
     }
 
