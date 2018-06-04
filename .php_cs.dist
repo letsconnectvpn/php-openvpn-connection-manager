@@ -1,0 +1,29 @@
+<?php
+
+return PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
+    ->setRules(
+        [
+            '@Symfony' => true,
+            '@Symfony:risky' => true,
+            'ordered_imports' => true,
+            'ordered_class_elements' => true,
+            'array_syntax' => ['syntax' => 'short'],
+            'native_function_invocation' => true,
+            'phpdoc_order' => true,
+            'phpdoc_no_empty_return' => false,
+            'phpdoc_add_missing_param_annotation' => true,
+            'strict_comparison' => true,
+            'strict_param' => true,
+            'php_unit_strict' => true,
+            'header_comment' => [
+                'header' => <<< 'EOD'
+eduVPN - End-user friendly VPN.
+
+Copyright: 2016-2018, The Commons Conservancy eduVPN Programme
+SPDX-License-Identifier: AGPL-3.0+
+EOD
+             ],
+        ]
+    )
+    ->setFinder(PhpCsFixer\Finder::create()->in(__DIR__));
