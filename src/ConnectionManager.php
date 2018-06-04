@@ -64,17 +64,17 @@ class ConnectionManager
     }
 
     /**
-     * @param string $clientId
+     * @param string $commonName
      *
      * @return bool
      */
-    public function disconnect($clientId)
+    public function disconnect($commonName)
     {
         $clientsKilled = 0;
         foreach ($this->socketAddressList as $socketAddress) {
             try {
                 $this->managementSocket->open($socketAddress);
-                $response = $this->managementSocket->command(\sprintf('kill %s', $clientId));
+                $response = $this->managementSocket->command(\sprintf('kill %s', $commonName));
                 if (0 === \strpos($response[0], 'SUCCESS: ')) {
                     ++$clientsKilled;
                 }
