@@ -72,7 +72,7 @@ class ConnectionManagerTest extends TestCase
             new TestSocket()
         );
 
-        $this->assertTrue($serverManager->disconnect('foo'));
+        $this->assertSame(1, $serverManager->disconnect(['foo']));
     }
 
     public function testDisconnectNotThere()
@@ -85,6 +85,6 @@ class ConnectionManagerTest extends TestCase
             new TestSocket()
         );
 
-        $this->assertFalse($serverManager->disconnect('foo'));
+        $this->assertSame(0, $serverManager->disconnect(['foo']));
     }
 }

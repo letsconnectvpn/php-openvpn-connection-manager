@@ -21,7 +21,7 @@ This library supports:
     );
 
     $connMan->connections();
-    $connMan->disconnect('foo');    // "foo" is the CN of the client certificate
+    $connMan->disconnect(['foo']);    // array with CNs to disconnect
 
 Also see `example/`.
 

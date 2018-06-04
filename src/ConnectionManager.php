@@ -64,19 +64,21 @@ class ConnectionManager
     }
 
     /**
-     * @param string $commonName
+     * @param array<string> $commonNameList
      *
-     * @return bool
+     * @return int
      */
-    public function disconnect($commonName)
+    public function disconnect(array $commonNameList)
     {
-        $clientsKilled = 0;
+        $disconnectCount = 0;
         foreach ($this->socketAddressList as $socketAddress) {
             try {
                 $this->managementSocket->open($socketAddress);
-                $response = $this->managementSocket->command(\sprintf('kill %s', $commonName));
-                if (0 === \strpos($response[0], 'SUCCESS: ')) {
-                    ++$clientsKilled;
+                foreach ($commonNameList as $commonName) {
+                    $result = $this->managementSocket->command(\sprintf('kill %s', $commonName));
+                    if (0 === \strpos($result[0], 'SUCCESS: ')) {
+                        ++$disconnectCount;
+                    }
                 }
                 $this->managementSocket->close();
             } catch (ManagementSocketException $e) {
@@ -90,6 +92,6 @@ class ConnectionManager
             }
         }
 
-        return 0 !== $clientsKilled;
+        return $disconnectCount;
     }
 }
