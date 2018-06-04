@@ -19,4 +19,9 @@ $connMan = new ConnectionManager(
     new ErrorLogger()
 );
 
-$connMan->connections();
+$connectionList = $connMan->connections();
+foreach ($connectionList as $connectionInfo) {
+    $commonName = $connectionInfo['common_name'];
+    $virtualAddress = $connectionInfo['virtual_address'];
+    echo \sprintf('[%s]: %s', $commonName, \implode(', ', $virtualAddress)).PHP_EOL;
+}
