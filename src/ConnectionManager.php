@@ -13,7 +13,7 @@ use LC\OpenVpn\Exception\ManagementSocketException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-class ConnectionManager
+class ConnectionManager implements ConnectionManagerInterface
 {
     /** @var array<string> */
     private $socketAddressList;
