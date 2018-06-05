@@ -1,6 +1,6 @@
 # Introduction
 
-Simple libarary written in PHP to manage OpenVPN processes using the OpenVPN
+Simple library written in PHP to manage OpenVPN processes using the OpenVPN
 management socket.
 
 # Features
