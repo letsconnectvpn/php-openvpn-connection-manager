@@ -7,11 +7,11 @@
  * SPDX-License-Identifier: AGPL-3.0+
  */
 
-namespace SURFnet\LC\OpenVpn\Tests;
+namespace LC\OpenVpn\Tests;
 
 use Exception;
-use SURFnet\LC\OpenVpn\Exception\ManagementSocketException;
-use SURFnet\LC\OpenVpn\ManagementSocketInterface;
+use LC\OpenVpn\Exception\ManagementSocketException;
+use LC\OpenVpn\ManagementSocketInterface;
 
 /**
  * Abstraction to use the OpenVPN management interface using a socket

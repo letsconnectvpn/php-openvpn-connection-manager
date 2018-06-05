@@ -7,12 +7,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "SURFnet\\LC\\OpenVpn\\": "src/"
+            "LC\\OpenVpn\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "SURFnet\\LC\\OpenVpn\\Tests\\": "tests/"
+            "LC\\OpenVpn\\Tests\\": "tests/"
         }
     },
     "license": "AGPL-3.0",

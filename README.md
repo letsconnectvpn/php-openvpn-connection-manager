@@ -13,7 +13,7 @@ This library supports:
 
 # API 
 
-    $connMan = new \SURFnet\LC\OpenVpn\ConnectionManager(
+    $connMan = new \LC\OpenVpn\ConnectionManager(
         [
             'tcp://localhost:11940',
             'tcp://localhost:11941',

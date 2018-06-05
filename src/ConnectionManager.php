@@ -7,11 +7,11 @@
  * SPDX-License-Identifier: AGPL-3.0+
  */
 
-namespace SURFnet\LC\OpenVpn;
+namespace LC\OpenVpn;
 
+use LC\OpenVpn\Exception\ManagementSocketException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use SURFnet\LC\OpenVpn\Exception\ManagementSocketException;
 
 class ConnectionManager
 {

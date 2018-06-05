@@ -7,11 +7,11 @@
  * SPDX-License-Identifier: AGPL-3.0+
  */
 
-namespace SURFnet\LC\OpenVpn\Tests;
+namespace LC\OpenVpn\Tests;
 
+use LC\OpenVpn\ConnectionManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-use SURFnet\LC\OpenVpn\ConnectionManager;
 
 class ConnectionManagerTest extends TestCase
 {

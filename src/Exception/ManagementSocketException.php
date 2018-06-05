@@ -7,7 +7,7 @@
  * SPDX-License-Identifier: AGPL-3.0+
  */
 
-namespace SURFnet\LC\OpenVpn\Exception;
+namespace LC\OpenVpn\Exception;
 
 use Exception;
 

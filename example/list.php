@@ -11,8 +11,8 @@ $baseDir = \dirname(__DIR__);
 /** @psalm-suppress UnresolvableInclude */
 require_once \sprintf('%s/vendor/autoload.php', $baseDir);
 
-use SURFnet\LC\OpenVpn\ConnectionManager;
-use SURFnet\LC\OpenVpn\ErrorLogger;
+use LC\OpenVpn\ConnectionManager;
+use LC\OpenVpn\ErrorLogger;
 
 $connMan = new ConnectionManager(
     \array_slice($argv, 1),

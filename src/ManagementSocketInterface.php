@@ -7,7 +7,7 @@
  * SPDX-License-Identifier: AGPL-3.0+
  */
 
-namespace SURFnet\LC\OpenVpn;
+namespace LC\OpenVpn;
 
 interface ManagementSocketInterface
 {
