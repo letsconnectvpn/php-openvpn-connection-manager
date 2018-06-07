@@ -1,15 +1,15 @@
 # Introduction
 
-Simple library written in PHP to manage client connections to OpenVPN processes 
-through the OpenVPN management socket.
+Simple library written in PHP to manage OpenVPN processes using the OpenVPN
+management socket.
 
 # Features
 
 This library supports:
 
 * Traversing multiple OpenVPN management sockets;
-* Show connected clients;
-* Disconnect clients (by CN);
+* Extracting currently connected clients;
+* Disconnect a client (by CN);
 
 # API 
 
@@ -21,9 +21,9 @@ This library supports:
     );
 
     $connMan->connections();
-    $connMan->disconnect(['foo']);      // array with CNs to disconnect
+    $connMan->disconnect(['foo']);    // array with CNs to disconnect
 
-Also see the example in `example/`.
+Also see `example/`.
 
 # Contact
 
