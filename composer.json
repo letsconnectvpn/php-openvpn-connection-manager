@@ -15,7 +15,7 @@
             "LC\\OpenVpn\\Tests\\": "tests/"
         }
     },
-    "description": "OpenVPN Connection Manager",
+    "description": "Manage client connections to OpenVPN processes",
     "license": "AGPL-3.0",
     "name": "LC/openvpn-connection-manager",
     "require": {
