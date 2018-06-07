@@ -17,7 +17,7 @@ class StatusParser
     /**
      * @param array $statusData
      *
-     * @return array<ClientInfo>
+     * @return array
      */
     public static function parse(array $statusData)
     {
@@ -35,13 +35,13 @@ class StatusParser
             $clientValues = \str_getcsv($statusData[$i]);
             \array_shift($clientValues);
             $clientInfo = \array_combine($clientKeys, $clientValues);
-            $clientList[] = new ClientInfo(
-                $clientInfo['Common Name'],
-                [
+            $clientList[] = [
+                'common_name' => $clientInfo['Common Name'],
+                'virtual_address' => [
                     $clientInfo['Virtual Address'],
                     $clientInfo['Virtual IPv6 Address'],
-                ]
-            );
+                ],
+            ];
             ++$i;
         }
 
