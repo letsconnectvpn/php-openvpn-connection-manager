@@ -47,7 +47,7 @@ class ConnectionManager
         foreach ($this->socketAddressList as $socketAddress) {
             try {
                 $this->managementSocket->open($socketAddress);
-                $connectionList += StatusParser::parse($this->managementSocket->command('status 2'));
+                $connectionList = \array_merge($connectionList, StatusParser::parse($this->managementSocket->command('status 2')));
                 $this->managementSocket->close();
             } catch (ManagementSocketException $e) {
                 $this->logger->error(

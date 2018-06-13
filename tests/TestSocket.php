@@ -57,20 +57,25 @@ class TestSocket implements ManagementSocketInterface
     {
         switch ($command) {
             case 'status 2':
-                if ('tcp://127.0.0.1:11940' === $this->socketAddress) {
-                    // send back the returnData as an array
-                    return \explode("\n", \file_get_contents(__DIR__.'/socket/status_with_clients.txt'));
-                } else {
-                    return \explode("\n", \file_get_contents(__DIR__.'/socket/status_no_clients.txt'));
+                switch ($this->socketAddress) {
+                    case 'tcp://127.0.0.1:11940':
+                        return \explode("\n", \file_get_contents(__DIR__.'/socket/status_with_clients.txt'));
+                    case 'tcp://127.0.0.1:11941':
+                        return \explode("\n", \file_get_contents(__DIR__.'/socket/status_no_clients.txt'));
+                    case 'tcp://127.0.0.1:11945':
+                        return \explode("\n", \file_get_contents(__DIR__.'/socket/status_with_clients.txt'));
+                    case 'tcp://127.0.0.1:11946':
+                        return \explode("\n", \file_get_contents(__DIR__.'/socket/status_with_clients_two.txt'));
+                    default:
+                        throw new Exception('no match for this command');
                 }
                 // no break
             case 'kill foo':
                 if ('tcp://127.0.0.1:11940' === $this->socketAddress) {
                     return \explode("\n", \file_get_contents(__DIR__.'/socket/kill_success.txt'));
-                } else {
-                    return \explode("\n", \file_get_contents(__DIR__.'/socket/kill_error.txt'));
                 }
-                // no break
+
+                return \explode("\n", \file_get_contents(__DIR__.'/socket/kill_error.txt'));
             default:
                 throw new Exception('no match for this command');
         }
