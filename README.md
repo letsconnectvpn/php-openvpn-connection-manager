@@ -13,6 +13,7 @@ This library supports:
 
 # API 
 
+```php
     $connMan = new \LC\OpenVpn\ConnectionManager(
         [
             'tcp://localhost:11940',
@@ -22,6 +23,7 @@ This library supports:
 
     $connMan->connections();
     $connMan->disconnect(['foo']);      // array with CNs to disconnect
+```
 
 Also see the example in `example/`.
 
