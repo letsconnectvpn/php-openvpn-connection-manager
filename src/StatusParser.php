@@ -15,9 +15,9 @@ namespace LC\OpenVpn;
 class StatusParser
 {
     /**
-     * @param array $statusData
+     * @param array<int, string> $statusData
      *
-     * @return array
+     * @return array<int, array>
      */
     public static function parse(array $statusData)
     {

@@ -28,12 +28,15 @@ class ManagementSocket implements ManagementSocketInterface
      */
     public function open($socketAddress, $timeOut = 5)
     {
-        $this->socket = @\stream_socket_client($socketAddress, $errno, $errstr, $timeOut);
-        if (false === $this->socket) {
+        /** @var false|resource $socket */
+        $socket = @\stream_socket_client($socketAddress, $errno, $errstr, $timeOut);
+        if (false === $socket) {
             throw new ManagementSocketException(
-                \sprintf('%s (%s)', $errstr, $errno)
+                \sprintf('%s (%d)', $errstr, $errno)
             );
         }
+        $this->socket = $socket;
+
         // turn off logging as the output may interfere with our management
         // session, we do not care about the output
         $this->command('log off');
@@ -42,7 +45,7 @@ class ManagementSocket implements ManagementSocketInterface
     /**
      * @param string $command
      *
-     * @return array<string>
+     * @return array<int, string>
      */
     public function command($command)
     {
@@ -86,13 +89,15 @@ class ManagementSocket implements ManagementSocketInterface
     /**
      * @param \resource $socket
      *
-     * @return array<string>
+     * @return array<int,string>
      */
     private static function read($socket)
     {
         $dataBuffer = [];
         while (!\feof($socket) && !self::isEndOfResponse(\end($dataBuffer))) {
-            if (false === $readData = @\fgets($socket, 4096)) {
+            /** @var false|string $readData */
+            $readData = @\fgets($socket, 4096);
+            if (false === $readData) {
                 throw new ManagementSocketException('unable to read from socket');
             }
             $dataBuffer[] = \trim($readData);

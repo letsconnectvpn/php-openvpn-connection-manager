@@ -22,7 +22,7 @@ interface ManagementSocketInterface
     /**
      * @param string $command
      *
-     * @return array<string>
+     * @return array<int, string>
      */
     public function command($command);
 

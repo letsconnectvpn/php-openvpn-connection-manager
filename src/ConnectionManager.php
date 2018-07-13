@@ -15,7 +15,7 @@ use Psr\Log\NullLogger;
 
 class ConnectionManager
 {
-    /** @var array<string> */
+    /** @var array<int,string> */
     private $socketAddressList;
 
     /** @var \Psr\Log\LoggerInterface */
@@ -24,6 +24,11 @@ class ConnectionManager
     /** @var ManagementSocketInterface */
     private $managementSocket;
 
+    /**
+     * @param array<int,string>              $socketAddressList
+     * @param null|\Psr\Log\LoggerInterface  $logger
+     * @param null|ManagementSocketInterface $managementSocket
+     */
     public function __construct(array $socketAddressList, LoggerInterface $logger = null, ManagementSocketInterface $managementSocket = null)
     {
         $this->socketAddressList = $socketAddressList;
