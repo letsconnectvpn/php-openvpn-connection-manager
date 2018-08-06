@@ -19,9 +19,18 @@ $connMan = new ConnectionManager(
     new ErrorLogger()
 );
 
+/** @var array<int, array> */
 $connectionList = $connMan->connections();
+$commonNameList = [];
 foreach ($connectionList as $connectionInfo) {
+    /** @var string */
     $commonName = $connectionInfo['common_name'];
+    $commonNameList[] = $commonName;
+    /** @var array<string> */
     $virtualAddress = $connectionInfo['virtual_address'];
     echo \sprintf('[%s]: %s', $commonName, \implode(', ', $virtualAddress)).PHP_EOL;
 }
+
+/** @var int */
+$clientCount = $connMan->disconnect($commonNameList);
+echo \sprintf('Disconnected %d clients!', $clientCount).PHP_EOL;
