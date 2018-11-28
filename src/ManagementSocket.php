@@ -29,7 +29,7 @@ class ManagementSocket implements ManagementSocketInterface
     public function open($socketAddress, $timeOut = 5)
     {
         /** @var false|resource $socket */
-        $socket = @\stream_socket_client($socketAddress, $errno, $errstr, $timeOut);
+        $socket = \stream_socket_client($socketAddress, $errno, $errstr, $timeOut);
         if (false === $socket) {
             throw new ManagementSocketException(
                 \sprintf('%s (%d)', $errstr, $errno)
@@ -68,7 +68,7 @@ class ManagementSocket implements ManagementSocketInterface
         if (null === $this->socket) {
             throw new ManagementSocketException('socket not open');
         }
-        if (false === @\fclose($this->socket)) {
+        if (false === \fclose($this->socket)) {
             throw new ManagementSocketException('unable to close the socket');
         }
     }
@@ -81,7 +81,7 @@ class ManagementSocket implements ManagementSocketInterface
      */
     private static function write($socket, $data)
     {
-        if (false === @\fwrite($socket, $data)) {
+        if (false === \fwrite($socket, $data)) {
             throw new ManagementSocketException('unable to write to socket');
         }
     }
@@ -96,7 +96,7 @@ class ManagementSocket implements ManagementSocketInterface
         $dataBuffer = [];
         while (!\feof($socket) && !self::isEndOfResponse(\end($dataBuffer))) {
             /** @var false|string $readData */
-            $readData = @\fgets($socket, 4096);
+            $readData = \fgets($socket, 4096);
             if (false === $readData) {
                 throw new ManagementSocketException('unable to read from socket');
             }
