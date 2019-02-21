@@ -28,6 +28,7 @@ class StatusParser
         while (0 !== \strpos($statusData[$i], 'HEADER,CLIENT_LIST')) {
             ++$i;
         }
+        /** @var array<string> */
         $clientKeys = \array_slice(\str_getcsv($statusData[$i]), 2);
         ++$i;
         // iterate over all CLIENT_LIST entries

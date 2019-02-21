@@ -26,8 +26,8 @@ class ConnectionManager
 
     /**
      * @param array<int,string>              $socketAddressList
-     * @param null|\Psr\Log\LoggerInterface  $logger
-     * @param null|ManagementSocketInterface $managementSocket
+     * @param \Psr\Log\LoggerInterface|null  $logger
+     * @param ManagementSocketInterface|null $managementSocket
      */
     public function __construct(array $socketAddressList, LoggerInterface $logger = null, ManagementSocketInterface $managementSocket = null)
     {

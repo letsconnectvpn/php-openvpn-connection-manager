@@ -17,7 +17,7 @@ use LC\OpenVpn\Exception\ManagementSocketException;
  */
 class ManagementSocket implements ManagementSocketInterface
 {
-    /** @var null|resource */
+    /** @var resource|null */
     private $socket = null;
 
     /**

@@ -22,7 +22,7 @@ class TestSocket implements ManagementSocketInterface
     /** @var bool */
     private $connectFail;
 
-    /** @var null|string */
+    /** @var string|null */
     private $socketAddress;
 
     /**
