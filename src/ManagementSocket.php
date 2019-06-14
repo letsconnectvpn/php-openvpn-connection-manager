@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * eduVPN - End-user friendly VPN.
  *
@@ -20,13 +22,7 @@ class ManagementSocket implements ManagementSocketInterface
     /** @var resource|null */
     private $socket = null;
 
-    /**
-     * @param string $socketAddress
-     * @param int    $timeOut
-     *
-     * @return void
-     */
-    public function open($socketAddress, $timeOut = 5)
+    public function open(string $socketAddress, int $timeOut = 5): void
     {
         /** @var false|resource $socket */
         $socket = \stream_socket_client($socketAddress, $errno, $errstr, $timeOut);
@@ -43,11 +39,9 @@ class ManagementSocket implements ManagementSocketInterface
     }
 
     /**
-     * @param string $command
-     *
-     * @return array<int, string>
+     * @return array<string>
      */
-    public function command($command)
+    public function command(string $command): array
     {
         if (null === $this->socket) {
             throw new ManagementSocketException('socket not open');
@@ -60,10 +54,7 @@ class ManagementSocket implements ManagementSocketInterface
         return self::read($this->socket);
     }
 
-    /**
-     * @return void
-     */
-    public function close()
+    public function close(): void
     {
         if (null === $this->socket) {
             throw new ManagementSocketException('socket not open');
@@ -75,11 +66,8 @@ class ManagementSocket implements ManagementSocketInterface
 
     /**
      * @param resource $socket
-     * @param string   $data
-     *
-     * @return void
      */
-    private static function write($socket, $data)
+    private static function write($socket, string $data): void
     {
         if (false === \fwrite($socket, $data)) {
             throw new ManagementSocketException('unable to write to socket');
@@ -87,11 +75,11 @@ class ManagementSocket implements ManagementSocketInterface
     }
 
     /**
-     * @param \resource $socket
+     * @param resource $socket
      *
-     * @return array<int,string>
+     * @return array<string>
      */
-    private static function read($socket)
+    private static function read($socket): array
     {
         $dataBuffer = [];
         while (!\feof($socket) && !self::isEndOfResponse(\end($dataBuffer))) {
@@ -106,12 +94,7 @@ class ManagementSocket implements ManagementSocketInterface
         return $dataBuffer;
     }
 
-    /**
-     * @param string $lastLine
-     *
-     * @return bool
-     */
-    private static function isEndOfResponse($lastLine)
+    private static function isEndOfResponse(string $lastLine): bool
     {
         $endMarkers = ['END', 'SUCCESS: ', 'ERROR: '];
         foreach ($endMarkers as $endMarker) {

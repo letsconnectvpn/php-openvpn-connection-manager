@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * eduVPN - End-user friendly VPN.
  *
@@ -11,23 +13,12 @@ namespace LC\OpenVpn;
 
 interface ManagementSocketInterface
 {
-    /**
-     * @param string $socketAddress
-     * @param int    $timeOut
-     *
-     * @return void
-     */
-    public function open($socketAddress, $timeOut = 5);
+    public function open(string $socketAddress, int $timeOut = 5): void;
 
     /**
-     * @param string $command
-     *
-     * @return array<int, string>
+     * @return array<string>
      */
-    public function command($command);
+    public function command(string $command): array;
 
-    /**
-     * @return void
-     */
-    public function close();
+    public function close(): void;
 }

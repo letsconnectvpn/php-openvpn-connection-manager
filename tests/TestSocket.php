@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * eduVPN - End-user friendly VPN.
  *
@@ -25,22 +27,13 @@ class TestSocket implements ManagementSocketInterface
     /** @var string|null */
     private $socketAddress;
 
-    /**
-     * @param bool $connectFail
-     */
-    public function __construct($connectFail = false)
+    public function __construct(bool $connectFail = false)
     {
         $this->connectFail = $connectFail;
         $this->socketAddress = null;
     }
 
-    /**
-     * @param string $socketAddress
-     * @param int    $timeOut
-     *
-     * @return void
-     */
-    public function open($socketAddress, $timeOut = 5)
+    public function open(string $socketAddress, int $timeOut = 5): void
     {
         $this->socketAddress = $socketAddress;
         if ($this->connectFail) {
@@ -49,11 +42,9 @@ class TestSocket implements ManagementSocketInterface
     }
 
     /**
-     * @param string $command
-     *
      * @return array<string>
      */
-    public function command($command)
+    public function command(string $command): array
     {
         switch ($command) {
             case 'status 2':
@@ -81,10 +72,7 @@ class TestSocket implements ManagementSocketInterface
         }
     }
 
-    /**
-     * @return void
-     */
-    public function close()
+    public function close(): void
     {
         $this->socketAddress = null;
     }

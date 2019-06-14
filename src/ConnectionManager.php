@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * eduVPN - End-user friendly VPN.
  *
@@ -15,7 +17,7 @@ use Psr\Log\NullLogger;
 
 class ConnectionManager
 {
-    /** @var array<int,string> */
+    /** @var array<string> */
     private $socketAddressList;
 
     /** @var \Psr\Log\LoggerInterface */
@@ -25,11 +27,9 @@ class ConnectionManager
     private $managementSocket;
 
     /**
-     * @param array<int,string>              $socketAddressList
-     * @param \Psr\Log\LoggerInterface|null  $logger
-     * @param ManagementSocketInterface|null $managementSocket
+     * @param array<string> $socketAddressList
      */
-    public function __construct(array $socketAddressList, LoggerInterface $logger = null, ManagementSocketInterface $managementSocket = null)
+    public function __construct(array $socketAddressList, ?LoggerInterface $logger = null, ?ManagementSocketInterface $managementSocket = null)
     {
         $this->socketAddressList = $socketAddressList;
         if (null === $logger) {
@@ -44,9 +44,9 @@ class ConnectionManager
     }
 
     /**
-     * @return array<int, array>
+     * @return array<array>
      */
-    public function connections()
+    public function connections(): array
     {
         $connectionList = [];
         foreach ($this->socketAddressList as $socketAddress) {
@@ -70,10 +70,8 @@ class ConnectionManager
 
     /**
      * @param array<string> $commonNameList
-     *
-     * @return int
      */
-    public function disconnect(array $commonNameList)
+    public function disconnect(array $commonNameList): int
     {
         $disconnectCount = 0;
         foreach ($this->socketAddressList as $socketAddress) {

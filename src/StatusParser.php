@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * eduVPN - End-user friendly VPN.
  *
@@ -15,11 +17,11 @@ namespace LC\OpenVpn;
 class StatusParser
 {
     /**
-     * @param array<int, string> $statusData
+     * @param array<string> $statusData
      *
-     * @return array<int, array>
+     * @return array<array>
      */
-    public static function parse(array $statusData)
+    public static function parse(array $statusData): array
     {
         $clientList = [];
 

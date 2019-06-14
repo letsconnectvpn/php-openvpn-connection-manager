@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * eduVPN - End-user friendly VPN.
  *
@@ -15,7 +17,7 @@ use Psr\Log\NullLogger;
 
 class ConnectionManagerTest extends TestCase
 {
-    public function testConnections()
+    public function testConnections(): void
     {
         $serverManager = new ConnectionManager(
             [
@@ -46,7 +48,7 @@ class ConnectionManagerTest extends TestCase
         );
     }
 
-    public function testConnectionsTwoSockets()
+    public function testConnectionsTwoSockets(): void
     {
         $serverManager = new ConnectionManager(
             [
@@ -85,7 +87,7 @@ class ConnectionManagerTest extends TestCase
         );
     }
 
-    public function testConnectionsNoConnections()
+    public function testConnectionsNoConnections(): void
     {
         $serverManager = new ConnectionManager(
             [
@@ -101,7 +103,7 @@ class ConnectionManagerTest extends TestCase
         );
     }
 
-    public function testDisconnect()
+    public function testDisconnect(): void
     {
         $serverManager = new ConnectionManager(
             [
@@ -114,7 +116,7 @@ class ConnectionManagerTest extends TestCase
         $this->assertSame(1, $serverManager->disconnect(['foo']));
     }
 
-    public function testDisconnectNotThere()
+    public function testDisconnectNotThere(): void
     {
         $serverManager = new ConnectionManager(
             [
