@@ -9,9 +9,7 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0+
  */
 
-$baseDir = \dirname(__DIR__);
-/** @psalm-suppress UnresolvableInclude */
-require_once \sprintf('%s/vendor/autoload.php', $baseDir);
+require_once \dirname(__DIR__).'/vendor/autoload.php';
 
 use LC\OpenVpn\ConnectionManager;
 

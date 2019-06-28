@@ -13,7 +13,6 @@ namespace LC\OpenVpn\Tests;
 
 use LC\OpenVpn\ConnectionManager;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 
 class ConnectionManagerTest extends TestCase
 {
@@ -22,10 +21,9 @@ class ConnectionManagerTest extends TestCase
         $serverManager = new ConnectionManager(
             [
                 'tcp://127.0.0.1:11940',
-            ],
-            new NullLogger(),
-            new TestSocket()
+            ]
         );
+        $serverManager->setManagementSocket(new TestSocket());
 
         $this->assertSame(
             [
@@ -54,10 +52,9 @@ class ConnectionManagerTest extends TestCase
             [
                 'tcp://127.0.0.1:11945',
                 'tcp://127.0.0.1:11946',
-            ],
-            new NullLogger(),
-            new TestSocket()
+            ]
         );
+        $serverManager->setManagementSocket(new TestSocket());
 
         $this->assertSame(
             [
@@ -92,10 +89,9 @@ class ConnectionManagerTest extends TestCase
         $serverManager = new ConnectionManager(
             [
                 'tcp://127.0.0.1:11941',
-            ],
-            new NullLogger(),
-            new TestSocket()
+            ]
         );
+        $serverManager->setManagementSocket(new TestSocket());
 
         $this->assertSame(
             [],
@@ -108,10 +104,9 @@ class ConnectionManagerTest extends TestCase
         $serverManager = new ConnectionManager(
             [
                 'tcp://127.0.0.1:11940',
-            ],
-            new NullLogger(),
-            new TestSocket()
+            ]
         );
+        $serverManager->setManagementSocket(new TestSocket());
 
         $this->assertSame(1, $serverManager->disconnect(['foo']));
     }
@@ -121,10 +116,9 @@ class ConnectionManagerTest extends TestCase
         $serverManager = new ConnectionManager(
             [
                 'tcp://127.0.0.1:11941',
-            ],
-            new NullLogger(),
-            new TestSocket()
+            ]
         );
+        $serverManager->setManagementSocket(new TestSocket());
 
         $this->assertSame(0, $serverManager->disconnect(['foo']));
     }

@@ -361,6 +361,7 @@ return [
     'directory_list' => [
         'src',
         'example',
+        'tests',
         'vendor/phpunit/phpunit/src',
         'vendor/psr/log/Psr/Log',
     ],

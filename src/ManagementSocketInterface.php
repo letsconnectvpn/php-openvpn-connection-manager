@@ -13,7 +13,7 @@ namespace LC\OpenVpn;
 
 interface ManagementSocketInterface
 {
-    public function open(string $socketAddress, int $timeOut = 5): void;
+    public function open(string $socketAddress): void;
 
     /**
      * @return array<string>

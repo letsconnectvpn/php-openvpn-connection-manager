@@ -29,17 +29,20 @@ class ConnectionManager
     /**
      * @param array<string> $socketAddressList
      */
-    public function __construct(array $socketAddressList, ?LoggerInterface $logger = null, ?ManagementSocketInterface $managementSocket = null)
+    public function __construct(array $socketAddressList)
     {
         $this->socketAddressList = $socketAddressList;
-        if (null === $logger) {
-            $logger = new NullLogger();
-        }
-        $this->logger = $logger;
+        $this->logger = new NullLogger();
+        $this->managementSocket = new ManagementSocket();
+    }
 
-        if (null === $managementSocket) {
-            $managementSocket = new ManagementSocket();
-        }
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
+    }
+
+    public function setManagementSocket(ManagementSocketInterface $managementSocket): void
+    {
         $this->managementSocket = $managementSocket;
     }
 

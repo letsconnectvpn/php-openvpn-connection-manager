@@ -22,10 +22,17 @@ class ManagementSocket implements ManagementSocketInterface
     /** @var resource|null */
     private $socket = null;
 
-    public function open(string $socketAddress, int $timeOut = 5): void
+    /** @var int */
+    private $timeOut;
+
+    public function __construct(int $timeOut = 5)
     {
-        /** @var false|resource $socket */
-        $socket = \stream_socket_client($socketAddress, $errno, $errstr, $timeOut);
+        $this->timeOut = $timeOut;
+    }
+
+    public function open(string $socketAddress): void
+    {
+        $socket = \stream_socket_client($socketAddress, $errno, $errstr, $this->timeOut);
         if (false === $socket) {
             throw new ManagementSocketException(
                 \sprintf('%s (%d)', $errstr, $errno)
@@ -83,7 +90,6 @@ class ManagementSocket implements ManagementSocketInterface
     {
         $dataBuffer = [];
         while (!\feof($socket) && !self::isEndOfResponse(\end($dataBuffer))) {
-            /** @var false|string $readData */
             $readData = \fgets($socket, 4096);
             if (false === $readData) {
                 throw new ManagementSocketException('unable to read from socket');

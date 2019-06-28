@@ -33,7 +33,7 @@ class TestSocket implements ManagementSocketInterface
         $this->socketAddress = null;
     }
 
-    public function open(string $socketAddress, int $timeOut = 5): void
+    public function open(string $socketAddress): void
     {
         $this->socketAddress = $socketAddress;
         if ($this->connectFail) {
@@ -50,23 +50,23 @@ class TestSocket implements ManagementSocketInterface
             case 'status 2':
                 switch ($this->socketAddress) {
                     case 'tcp://127.0.0.1:11940':
-                        return \explode("\n", \file_get_contents(__DIR__.'/socket/status_with_clients.txt'));
+                        return \explode("\n", self::readFile(__DIR__.'/socket/status_with_clients.txt'));
                     case 'tcp://127.0.0.1:11941':
-                        return \explode("\n", \file_get_contents(__DIR__.'/socket/status_no_clients.txt'));
+                        return \explode("\n", self::readFile(__DIR__.'/socket/status_no_clients.txt'));
                     case 'tcp://127.0.0.1:11945':
-                        return \explode("\n", \file_get_contents(__DIR__.'/socket/status_with_clients.txt'));
+                        return \explode("\n", self::readFile(__DIR__.'/socket/status_with_clients.txt'));
                     case 'tcp://127.0.0.1:11946':
-                        return \explode("\n", \file_get_contents(__DIR__.'/socket/status_with_clients_two.txt'));
+                        return \explode("\n", self::readFile(__DIR__.'/socket/status_with_clients_two.txt'));
                     default:
                         throw new Exception('no match for this command');
                 }
                 // no break
             case 'kill foo':
                 if ('tcp://127.0.0.1:11940' === $this->socketAddress) {
-                    return \explode("\n", \file_get_contents(__DIR__.'/socket/kill_success.txt'));
+                    return \explode("\n", self::readFile(__DIR__.'/socket/kill_success.txt'));
                 }
 
-                return \explode("\n", \file_get_contents(__DIR__.'/socket/kill_error.txt'));
+                return \explode("\n", self::readFile(__DIR__.'/socket/kill_error.txt'));
             default:
                 throw new Exception('no match for this command');
         }
@@ -75,5 +75,14 @@ class TestSocket implements ManagementSocketInterface
     public function close(): void
     {
         $this->socketAddress = null;
+    }
+
+    private static function readFile(string $fileName): string
+    {
+        if (false === $fileContent = \file_get_contents($fileName)) {
+            throw new Exception(\sprintf('unable to read file "%s"', $fileName));
+        }
+
+        return $fileContent;
     }
 }
