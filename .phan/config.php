@@ -209,6 +209,12 @@ return [
     // This has a few known false positives, e.g. for loops or branches.
     'unused_variable_detection' => true,
 
+    // Set to true in order to attempt to detect redundant and impossible conditions.
+    //
+    // This has some false positives involving loops,
+    // variables set in branches of loops, and global variables.
+    'redundant_condition_detection' => true,
+
     // If true, this runs a quick version of checks that takes less
     // time at the cost of not running as thorough
     // of an analysis. You should consider setting this
@@ -354,6 +360,7 @@ return [
     // your application should be included in this list.
     'directory_list' => [
         'src',
+        'example',
         'vendor/phpunit/phpunit/src',
         'vendor/psr/log/Psr/Log',
     ],
