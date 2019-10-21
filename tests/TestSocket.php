@@ -9,7 +9,6 @@
 
 namespace LC\OpenVpn\Tests;
 
-use Exception;
 use LC\OpenVpn\Exception\ManagementSocketException;
 use LC\OpenVpn\ManagementSocketInterface;
 
@@ -22,8 +21,8 @@ class TestSocket implements ManagementSocketInterface
     /** @var bool */
     private $connectFail;
 
-    /** @var string|null */
-    private $socketAddress;
+    /** @var array<int> */
+    private $managementPortList = [];
 
     /**
      * @param bool $connectFail
@@ -31,7 +30,6 @@ class TestSocket implements ManagementSocketInterface
     public function __construct($connectFail = false)
     {
         $this->connectFail = $connectFail;
-        $this->socketAddress = null;
     }
 
     /**
@@ -42,7 +40,6 @@ class TestSocket implements ManagementSocketInterface
      */
     public function open($socketAddress, $timeOut = 5)
     {
-        $this->socketAddress = $socketAddress;
         if ($this->connectFail) {
             throw new ManagementSocketException('unable to connect to socket');
         }
@@ -55,30 +52,34 @@ class TestSocket implements ManagementSocketInterface
      */
     public function command($command)
     {
-        switch ($command) {
-            case 'status 2':
-                switch ($this->socketAddress) {
-                    case 'tcp://127.0.0.1:11940':
-                        return \explode("\n", \file_get_contents(__DIR__.'/socket/status_with_clients.txt'));
-                    case 'tcp://127.0.0.1:11941':
-                        return \explode("\n", \file_get_contents(__DIR__.'/socket/status_no_clients.txt'));
-                    case 'tcp://127.0.0.1:11945':
-                        return \explode("\n", \file_get_contents(__DIR__.'/socket/status_with_clients.txt'));
-                    case 'tcp://127.0.0.1:11946':
-                        return \explode("\n", \file_get_contents(__DIR__.'/socket/status_with_clients_two.txt'));
-                    default:
-                        throw new Exception('no match for this command');
-                }
-                // no break
-            case 'kill foo':
-                if ('tcp://127.0.0.1:11940' === $this->socketAddress) {
-                    return \explode("\n", \file_get_contents(__DIR__.'/socket/kill_success.txt'));
-                }
+        if (0 === \strpos($command, 'SET_OPENVPN_MANAGEMENT_PORT_LIST ')) {
+            // record the management ports we want to query
+            foreach (\explode(' ', \substr($command, 33)) as $managementPort) {
+                $this->managementPortList[] = (int) $managementPort;
+            }
 
-                return \explode("\n", \file_get_contents(__DIR__.'/socket/kill_error.txt'));
-            default:
-                throw new Exception('no match for this command');
+            return [];
         }
+
+        if ('LIST' === $command) {
+            if ([11940] === $this->managementPortList) {
+                return \explode("\n", \file_get_contents(__DIR__.'/socket/list_no_clients.txt'));
+            }
+            if ([11941] === $this->managementPortList) {
+                return \explode("\n", \file_get_contents(__DIR__.'/socket/list_one_client.txt'));
+            }
+            if ([11942] === $this->managementPortList) {
+                return \explode("\n", \file_get_contents(__DIR__.'/socket/list_two_clients.txt'));
+            }
+
+            return ['OK: 0'];
+        }
+
+        if (0 === \strpos($command, 'DISCONNECT foo')) {
+            return \explode("\n", \file_get_contents(__DIR__.'/socket/disconnect.txt'));
+        }
+
+        return ['ERR: INVALID_COMMAND'];
     }
 
     /**
@@ -86,6 +87,6 @@ class TestSocket implements ManagementSocketInterface
      */
     public function close()
     {
-        $this->socketAddress = null;
+        // NOP
     }
 }

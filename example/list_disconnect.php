@@ -7,14 +7,13 @@
  * SPDX-License-Identifier: AGPL-3.0+
  */
 
-$baseDir = \dirname(__DIR__);
-/** @psalm-suppress UnresolvableInclude */
-require_once \sprintf('%s/vendor/autoload.php', $baseDir);
+require_once \dirname(__DIR__).'/vendor/autoload.php';
 
 use LC\OpenVpn\ConnectionManager;
 
 $connMan = new ConnectionManager(
-    \array_slice($argv, 1)
+    'tcp://localhost:41194',
+    [11940, 11941]
 );
 
 /** @var array<int, array> */
@@ -29,6 +28,6 @@ foreach ($connectionList as $connectionInfo) {
     echo \sprintf('[%s]: %s', $commonName, \implode(', ', $virtualAddress)).PHP_EOL;
 }
 
-/** @var int */
-$clientCount = $connMan->disconnect($commonNameList);
-echo \sprintf('Disconnected %d clients!', $clientCount).PHP_EOL;
+/* @var int */
+//$clientCount = $connMan->disconnect($commonNameList);
+//echo \sprintf('Disconnected %d clients!', $clientCount).PHP_EOL;

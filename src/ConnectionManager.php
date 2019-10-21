@@ -15,27 +15,32 @@ use Psr\Log\NullLogger;
 
 class ConnectionManager
 {
-    /** @var array<int,string> */
-    private $socketAddressList;
+    /** @var string */
+    private $remoteSocket;
 
-    /** @var \Psr\Log\LoggerInterface */
-    private $logger;
+    /** @var array<int> */
+    private $managementPortList;
 
     /** @var ManagementSocketInterface */
     private $managementSocket;
 
+    /** @var \Psr\Log\LoggerInterface */
+    private $logger;
+
     /**
-     * @param array<int,string>              $socketAddressList
+     * @param string                         $remoteSocket
+     * @param array<int>                     $managementPortList
      * @param ManagementSocketInterface|null $managementSocket
      */
-    public function __construct(array $socketAddressList, ManagementSocketInterface $managementSocket = null)
+    public function __construct($remoteSocket, array $managementPortList, ManagementSocketInterface $managementSocket = null)
     {
-        $this->socketAddressList = $socketAddressList;
-        $this->logger = new NullLogger();
+        $this->remoteSocket = $remoteSocket;
+        $this->managementPortList = $managementPortList;
         if (null === $managementSocket) {
             $managementSocket = new ManagementSocket();
         }
         $this->managementSocket = $managementSocket;
+        $this->logger = new NullLogger();
     }
 
     /**
@@ -53,24 +58,24 @@ class ConnectionManager
      */
     public function connections()
     {
-        $connectionList = [];
-        foreach ($this->socketAddressList as $socketAddress) {
-            try {
-                $this->managementSocket->open($socketAddress);
-                $connectionList = \array_merge($connectionList, StatusParser::parse($this->managementSocket->command('status 2')));
-                $this->managementSocket->close();
-            } catch (ManagementSocketException $e) {
-                $this->logger->error(
-                    \sprintf(
-                        'error with socket "%s": "%s"',
-                        $socketAddress,
-                        $e->getMessage()
-                    )
-                );
-            }
-        }
+        try {
+            $this->managementSocket->open($this->remoteSocket);
+            $this->managementSocket->command(\sprintf('SET_OPENVPN_MANAGEMENT_PORT_LIST %s', \implode(' ', $this->managementPortList)));
+            $connectionList = ClientListParser::parse($this->managementSocket->command('LIST'));
+            $this->managementSocket->close();
 
-        return $connectionList;
+            return $connectionList;
+        } catch (ManagementSocketException $e) {
+            $this->logger->error(
+                \sprintf(
+                    'error with socket "%s": "%s"',
+                    $this->remoteSocket,
+                    $e->getMessage()
+                )
+            );
+
+            return [];
+        }
     }
 
     /**
@@ -80,28 +85,28 @@ class ConnectionManager
      */
     public function disconnect(array $commonNameList)
     {
-        $disconnectCount = 0;
-        foreach ($this->socketAddressList as $socketAddress) {
-            try {
-                $this->managementSocket->open($socketAddress);
-                foreach ($commonNameList as $commonName) {
-                    $result = $this->managementSocket->command(\sprintf('kill %s', $commonName));
-                    if (0 === \strpos($result[0], 'SUCCESS: ')) {
-                        ++$disconnectCount;
-                    }
-                }
-                $this->managementSocket->close();
-            } catch (ManagementSocketException $e) {
-                $this->logger->error(
-                    \sprintf(
-                        'error with socket "%s", message: "%s"',
-                        $socketAddress,
-                        $e->getMessage()
-                    )
-                );
+        try {
+            $this->managementSocket->open($this->remoteSocket);
+            $this->managementSocket->command(\sprintf('SET_OPENVPN_MANAGEMENT_PORT_LIST %s', \implode(' ', $this->managementPortList)));
+            $disconnectCount = 0;
+            foreach ($commonNameList as $commonName) {
+                $this->managementSocket->command(\sprintf('DISCONNECT %s', $commonName));
+                // XXX parse result and increment disconnectCount!
+                ++$disconnectCount;
             }
-        }
+            $this->managementSocket->close();
 
-        return $disconnectCount;
+            return $disconnectCount;
+        } catch (ManagementSocketException $e) {
+            $this->logger->error(
+                \sprintf(
+                    'error with socket "%s", message: "%s"',
+                    $this->remoteSocket,
+                    $e->getMessage()
+                )
+            );
+
+            return 0;
+        }
     }
 }

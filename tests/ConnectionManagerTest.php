@@ -14,62 +14,30 @@ use PHPUnit\Framework\TestCase;
 
 class ConnectionManagerTest extends TestCase
 {
-    public function testConnections()
+    public function testConnectionsNoConnections()
     {
         $serverManager = new ConnectionManager(
-            [
-                'tcp://127.0.0.1:11940',
-            ],
+            'tcp://127.0.0.1:41194',
+            [11940],
             new TestSocket()
         );
 
         $this->assertSame(
-            [
-                [
-                    'common_name' => 'f3bb6f8efb4dc64be35e1044cf1b5e76',
-                    'virtual_address' => [
-                        '10.128.7.3',
-                        'fd60:4a08:2f59:ba0::1001',
-                    ],
-                ],
-                [
-                    'common_name' => '78f4a3c26062a434b01892e2b23126d1',
-                    'virtual_address' => [
-                        '10.128.7.4',
-                        'fd60:4a08:2f59:ba0::1002',
-                    ],
-                ],
-            ],
+            [],
             $serverManager->connections()
         );
     }
 
-    public function testConnectionsTwoSockets()
+    public function testOneConnections()
     {
         $serverManager = new ConnectionManager(
-            [
-                'tcp://127.0.0.1:11945',
-                'tcp://127.0.0.1:11946',
-            ],
+            'tcp://127.0.0.1:41194',
+            [11941],
             new TestSocket()
         );
 
         $this->assertSame(
             [
-                [
-                    'common_name' => 'f3bb6f8efb4dc64be35e1044cf1b5e76',
-                    'virtual_address' => [
-                        '10.128.7.3',
-                        'fd60:4a08:2f59:ba0::1001',
-                    ],
-                ],
-                [
-                    'common_name' => '78f4a3c26062a434b01892e2b23126d1',
-                    'virtual_address' => [
-                        '10.128.7.4',
-                        'fd60:4a08:2f59:ba0::1002',
-                    ],
-                ],
                 [
                     'common_name' => '67a7e629c4112b4a85fb254660129f2c',
                     'virtual_address' => [
@@ -82,17 +50,31 @@ class ConnectionManagerTest extends TestCase
         );
     }
 
-    public function testConnectionsNoConnections()
+    public function testTwoConnections()
     {
         $serverManager = new ConnectionManager(
-            [
-                'tcp://127.0.0.1:11941',
-            ],
+            'tcp://127.0.0.1:41194',
+            [11942],
             new TestSocket()
         );
 
         $this->assertSame(
-            [],
+            [
+                [
+                    'common_name' => 'f3bb6f8efb4dc64be35e1044cf1b5e76',
+                    'virtual_address' => [
+                        '10.128.7.3',
+                        'fd60:4a08:2f59:ba0::1001',
+                    ],
+                ],
+                [
+                    'common_name' => '78f4a3c26062a434b01892e2b23126d1',
+                    'virtual_address' => [
+                        '10.128.7.4',
+                        'fd60:4a08:2f59:ba0::1002',
+                    ],
+                ],
+            ],
             $serverManager->connections()
         );
     }
@@ -100,24 +82,11 @@ class ConnectionManagerTest extends TestCase
     public function testDisconnect()
     {
         $serverManager = new ConnectionManager(
-            [
-                'tcp://127.0.0.1:11940',
-            ],
+            'tcp://127.0.0.1:41194',
+            [11940],
             new TestSocket()
         );
 
         $this->assertSame(1, $serverManager->disconnect(['foo']));
-    }
-
-    public function testDisconnectNotThere()
-    {
-        $serverManager = new ConnectionManager(
-            [
-                'tcp://127.0.0.1:11941',
-            ],
-            new TestSocket()
-        );
-
-        $this->assertSame(0, $serverManager->disconnect(['foo']));
     }
 }
