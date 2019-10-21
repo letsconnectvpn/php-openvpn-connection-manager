@@ -45,6 +45,7 @@ class ManagementSocket implements ManagementSocketInterface
      */
     public function command($command)
     {
+        echo $command.PHP_EOL;
         if (null === $this->socket) {
             throw new ManagementSocketException('socket not open');
         }
@@ -90,7 +91,8 @@ class ManagementSocket implements ManagementSocketInterface
     private static function read($socket)
     {
         // find OK: <n>
-        $readData = \fgets($socket, 4096);
+        $readData = \fgets($socket);
+        echo $readData;
         if (0 !== \strpos($readData, 'OK: ')) {
             throw new ManagementSocketException(\sprintf('expected OK: <n> response, got "%s"', $readData));
         }
@@ -98,7 +100,10 @@ class ManagementSocket implements ManagementSocketInterface
         // read the rest in the buffer
         $dataBuffer = [];
         for ($i = 0; $i < $lineCount; ++$i) {
-            $dataBuffer[] = \trim(\fgets($socket, 4096));
+            $d = \trim(\fgets($socket));
+            echo $d.PHP_EOL;
+
+            $dataBuffer[] = $d;
         }
 
         return $dataBuffer;

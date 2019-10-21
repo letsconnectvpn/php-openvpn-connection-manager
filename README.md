@@ -1,13 +1,12 @@
 # Introduction
 
 Simple library written in PHP to manage client connections to OpenVPN processes 
-through the OpenVPN management socket.
+through the LC-daemon.
 
 # Features
 
 This library supports:
 
-* Traversing multiple OpenVPN management sockets;
 * Show connected clients;
 * Disconnect clients (by CN);
 
@@ -15,17 +14,15 @@ This library supports:
 
 ```php
     $connMan = new \LC\OpenVpn\ConnectionManager(
-        [
-            'tcp://localhost:11940',
-            'tcp://localhost:11941',
-        ]
+        'tcp://localhost:41194',
+        [11940, 11941]
     );
 
     $connMan->connections();
     $connMan->disconnect(['foo']);      // array with CNs to disconnect
 ```
 
-Also see the example in `example/`.
+Also see the examples in `example/`.
 
 # Contact
 
