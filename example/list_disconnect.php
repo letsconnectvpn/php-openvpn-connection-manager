@@ -12,11 +12,9 @@ $baseDir = \dirname(__DIR__);
 require_once \sprintf('%s/vendor/autoload.php', $baseDir);
 
 use LC\OpenVpn\ConnectionManager;
-use LC\OpenVpn\ErrorLogger;
 
 $connMan = new ConnectionManager(
-    \array_slice($argv, 1),
-    new ErrorLogger()
+    \array_slice($argv, 1)
 );
 
 /** @var array<int, array> */
