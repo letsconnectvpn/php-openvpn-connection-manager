@@ -26,21 +26,26 @@ class ConnectionManager
 
     /**
      * @param array<int,string>              $socketAddressList
-     * @param \Psr\Log\LoggerInterface|null  $logger
      * @param ManagementSocketInterface|null $managementSocket
      */
-    public function __construct(array $socketAddressList, LoggerInterface $logger = null, ManagementSocketInterface $managementSocket = null)
+    public function __construct(array $socketAddressList, ManagementSocketInterface $managementSocket = null)
     {
         $this->socketAddressList = $socketAddressList;
-        if (null === $logger) {
-            $logger = new NullLogger();
-        }
-        $this->logger = $logger;
-
+        $this->logger = new NullLogger();
         if (null === $managementSocket) {
             $managementSocket = new ManagementSocket();
         }
         $this->managementSocket = $managementSocket;
+    }
+
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     *
+     * @return void
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
     }
 
     /**
