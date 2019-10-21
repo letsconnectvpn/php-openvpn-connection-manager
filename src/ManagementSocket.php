@@ -36,16 +36,12 @@ class ManagementSocket implements ManagementSocketInterface
             );
         }
         $this->socket = $socket;
-
-        // turn off logging as the output may interfere with our management
-        // session, we do not care about the output
-        $this->command('log off');
     }
 
     /**
      * @param string $command
      *
-     * @return array<int, string>
+     * @return array<string>
      */
     public function command($command)
     {
@@ -89,37 +85,22 @@ class ManagementSocket implements ManagementSocketInterface
     /**
      * @param \resource $socket
      *
-     * @return array<int,string>
+     * @return array<string>
      */
     private static function read($socket)
     {
+        // find OK: <n>
+        $readData = \fgets($socket, 4096);
+        if (0 !== \strpos($readData, 'OK: ')) {
+            throw new ManagementSocketException(\sprintf('expected OK: <n> response, got "%s"', $readData));
+        }
+        $lineCount = (int) \substr($readData, 4);
+        // read the rest in the buffer
         $dataBuffer = [];
-        while (!\feof($socket) && !self::isEndOfResponse(\end($dataBuffer))) {
-            /** @var false|string $readData */
-            $readData = \fgets($socket, 4096);
-            if (false === $readData) {
-                throw new ManagementSocketException('unable to read from socket');
-            }
-            $dataBuffer[] = \trim($readData);
+        for ($i = 0; $i < $lineCount; ++$i) {
+            $dataBuffer[] = \trim(\fgets($socket, 4096));
         }
 
         return $dataBuffer;
-    }
-
-    /**
-     * @param string $lastLine
-     *
-     * @return bool
-     */
-    private static function isEndOfResponse($lastLine)
-    {
-        $endMarkers = ['END', 'SUCCESS: ', 'ERROR: '];
-        foreach ($endMarkers as $endMarker) {
-            if (0 === \strpos($lastLine, $endMarker)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

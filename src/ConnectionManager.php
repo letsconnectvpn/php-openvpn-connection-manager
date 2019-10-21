@@ -54,7 +54,7 @@ class ConnectionManager
     }
 
     /**
-     * @return array<int, array>
+     * @return array<array>
      */
     public function connections()
     {

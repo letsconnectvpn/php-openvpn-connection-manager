@@ -63,23 +63,24 @@ class TestSocket implements ManagementSocketInterface
 
         if ('LIST' === $command) {
             if ([11940] === $this->managementPortList) {
-                return \explode("\n", \file_get_contents(__DIR__.'/socket/list_no_clients.txt'));
+                return [];
             }
             if ([11941] === $this->managementPortList) {
-                return \explode("\n", \file_get_contents(__DIR__.'/socket/list_one_client.txt'));
+                return ['67a7e629c4112b4a85fb254660129f2c 10.104.9.130 fdd3:1503:4c0e:1da1::1000'];
             }
             if ([11942] === $this->managementPortList) {
-                return \explode("\n", \file_get_contents(__DIR__.'/socket/list_two_clients.txt'));
+                return [
+                    'f3bb6f8efb4dc64be35e1044cf1b5e76 10.128.7.3 fd60:4a08:2f59:ba0::1001',
+                    '78f4a3c26062a434b01892e2b23126d1 10.128.7.4 fd60:4a08:2f59:ba0::1002',
+                ];
             }
 
-            return ['OK: 0'];
+            return [];
         }
 
         if (0 === \strpos($command, 'DISCONNECT foo')) {
-            return \explode("\n", \file_get_contents(__DIR__.'/socket/disconnect.txt'));
+            return ['1'];
         }
-
-        return ['ERR: INVALID_COMMAND'];
     }
 
     /**

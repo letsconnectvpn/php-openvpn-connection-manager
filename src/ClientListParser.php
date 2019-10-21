@@ -15,22 +15,15 @@ namespace LC\OpenVpn;
 class ClientListParser
 {
     /**
-     * @param array<int, string> $statusData
+     * @param array<string> $responseList
      *
-     * @return array<int, array>
+     * @return array<array>
      */
-    public static function parse(array $statusData)
+    public static function parse(array $responseList)
     {
         $clientList = [];
-
-        // verify "OK: <n>"
-        if (0 !== \strpos($statusData[0], 'OK: ')) {
-            // the response does not start with "OK: <n>", so give up
-            return [];
-        }
-        $connectionCount = (int) \substr($statusData[0], 4);
-        for ($i = 1; $i <= $connectionCount; ++$i) {
-            $clientInfo = \explode(' ', $statusData[$i]);
+        foreach ($responseList as $clientData) {
+            $clientInfo = \explode(' ', $clientData);
             $clientList[] = [
                 'common_name' => $clientInfo[0],
                 'virtual_address' => [
