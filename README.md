@@ -1,3 +1,10 @@
+**Summary**: Manage client connections to OpenVPN processes
+
+**Description**: Simple library written in PHP to manage client connections to 
+OpenVPN processes through the OpenVPN management socket.
+
+**License**:  AGPL-3.0-or-later
+
 # Introduction
 
 Simple library written in PHP to manage client connections to OpenVPN processes 

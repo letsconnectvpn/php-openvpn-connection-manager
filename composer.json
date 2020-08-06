@@ -16,7 +16,7 @@
         }
     },
     "description": "Manage client connections to OpenVPN processes",
-    "license": "AGPL-3.0",
+    "license": " AGPL-3.0-or-later",
     "name": "lc/openvpn-connection-manager",
     "require": {
         "php": ">=5.4",
